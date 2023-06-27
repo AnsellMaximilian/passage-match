@@ -109,7 +109,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="flex gap-4 flex-wrap justify-center">
+        <div className="grid gap-4 grid-cols-12 mx-auto max-w-4xl">
           {cards.map((card) => (
             <Card
               key={card.id}
