@@ -2,12 +2,14 @@
 import { v4 as uuidv4 } from "uuid";
 
 import Card from "@/components/Card";
-import { shuffleArray } from "@/utils/helpers";
+import { parseSeconds, shuffleArray } from "@/utils/helpers";
 import cardImages, { CardImage } from "@/utils/images";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Menu from "@/components/Menu";
 import useUser from "@/utils/userUser";
+import EndGameModal from "@/components/EndGameModal";
+import moment from "moment";
 
 const doubledImages = [...cardImages, ...cardImages];
 
@@ -23,6 +25,14 @@ export default function Home() {
   const [choiceTwo, setChoiceTwo] = useState<null | string>(null);
   const [disabled, setDisabled] = useState(false);
   const [playing, setPlaying] = useState(false);
+
+  // Scoring system
+  const [score, setScore] = useState(0);
+  const [currentAttempts, setCurrentAttempts] = useState(10);
+  const [hasWon, setHasWon] = useState(false);
+  const [gameTimeIntervalId, setGameTimeIntervalId] =
+    useState<NodeJS.Timer | null>(null);
+  const [gameTime, setGameTime] = useState(180);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -48,21 +58,24 @@ export default function Home() {
             return card;
           })
         );
+        setScore((prev) => prev + currentAttempts);
+        setCurrentAttempts(10);
         reset();
       } else {
         setTimeout(() => reset(), 1000);
       }
     }
-  }, [choiceOne, choiceTwo, cards]);
+  }, [choiceOne, choiceTwo, cards, currentAttempts]);
 
   // check win
   useEffect(() => {
-    const hasWon = cards.every((card) => card.matched);
-    if (hasWon) {
+    const allMatched = cards.every((card) => card.matched);
+    if (allMatched && cards.length > 0) {
       setPlaying(false);
-      console.log("winner");
+      setHasWon(true);
+      if (gameTimeIntervalId) clearInterval(gameTimeIntervalId);
     }
-  }, [cards]);
+  }, [cards, gameTimeIntervalId]);
 
   const reset = () => {
     setDisabled(false);
@@ -72,6 +85,13 @@ export default function Home() {
 
   const startGame = () => {
     if (!playing) {
+      const intervalId = setInterval(() => {
+        setGameTime((prev) => prev - 1);
+      }, 1000);
+      setScore(0);
+      setCurrentAttempts(10);
+      setGameTimeIntervalId(intervalId);
+      setGameTime(180);
       setPlaying(true);
       reset();
       setCards((prev) => {
@@ -86,6 +106,7 @@ export default function Home() {
       });
     } else {
       setPlaying(false);
+      if (gameTimeIntervalId) clearInterval(gameTimeIntervalId);
     }
   };
 
@@ -93,6 +114,8 @@ export default function Home() {
     if (!choiceOne) {
       setChoiceOne(card.id);
     } else if (card.id !== choiceOne) {
+      // subtract attempts only on second choice
+      setCurrentAttempts((prev) => (prev > 0 ? prev - 1 : prev));
       setChoiceTwo(card.id);
     }
   };
@@ -106,7 +129,14 @@ export default function Home() {
               <Menu />
             </div>
             <div className="col-span-4">
-              <div className="text-xl font-semibold">Current Score: 0</div>
+              <div className="flex flex-col">
+                <div className="text-xs">
+                  Multiplier &middot; {parseSeconds(gameTime)}
+                </div>
+                <div className="text-xl font-semibold ">
+                  Current Score: {score}
+                </div>
+              </div>
             </div>
             <div className="col-span-4 text-right">
               <button
@@ -136,6 +166,12 @@ export default function Home() {
           </div>
         </div>
       )}
+      <EndGameModal
+        isOpen={hasWon}
+        closeModal={() => setHasWon(false)}
+        currentScore={score}
+        remainingSeconds={gameTime}
+      />
     </main>
   );
 }

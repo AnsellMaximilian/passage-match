@@ -30,15 +30,15 @@ export default function Menu() {
       >
         <HUIMenu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
-            <HUIMenu.Item>
-              {user && (
+            {user && (
+              <HUIMenu.Item>
                 <button
                   className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
                 >
                   <TrophyIcon /> <span>Leaderboard</span>
                 </button>
-              )}
-            </HUIMenu.Item>
+              </HUIMenu.Item>
+            )}
           </div>
 
           <div className="px-1 py-1 ">
