@@ -6,6 +6,7 @@ import { shuffleArray } from "@/utils/helpers";
 import cardImages, { CardImage } from "@/utils/images";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Menu from "@/components/Menu";
 
 const doubledImages = [...cardImages, ...cardImages];
 
@@ -54,7 +55,10 @@ export default function Home() {
   // check win
   useEffect(() => {
     const hasWon = cards.every((card) => card.matched);
-    if (hasWon) console.log("winner");
+    if (hasWon) {
+      setPlaying(false);
+      console.log("winner");
+    }
   }, [cards]);
 
   const reset = () => {
@@ -93,11 +97,16 @@ export default function Home() {
   return (
     <main className="bg-[#F0F3F9] min-h-screen">
       <div className="container mx-auto p-4">
-        <div className="p-4 mb-4 flex items-end">
-          <div className="flex gap-4">
-            <div>Best Score: 0</div>
+        <div className="mb-4 gap-4 grid grid-cols-12 text-center items-center max-w-4xl mx-auto">
+          <div className="col-span-4 text-left">
+            <button>
+              <Menu />
+            </button>
           </div>
-          <div className="ml-auto">
+          <div className="col-span-4">
+            <div className="text-xl font-semibold">Current Score: 0</div>
+          </div>
+          <div className="col-span-4 text-right">
             <button
               className={`${
                 playing
@@ -106,11 +115,11 @@ export default function Home() {
               } text-white px-4 py-2 rounded`}
               onClick={startGame}
             >
-              {playing ? "Give Up" : "Start Game"}
+              {playing ? "Give Up" : "Start"}
             </button>
           </div>
         </div>
-        <div className="grid gap-4 grid-cols-12 mx-auto max-w-4xl">
+        <div className="grid gap-2 md:gap-4 grid-cols-12 mx-auto max-w-4xl">
           {cards.map((card) => (
             <Card
               key={card.id}
