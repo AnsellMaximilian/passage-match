@@ -66,6 +66,7 @@ export default function Home() {
   const startGame = () => {
     if (!playing) {
       setPlaying(true);
+      reset();
       setCards((prev) => {
         const shuffledImages = shuffleArray(doubledImages);
         const shuffledCards = shuffledImages.map((image) => ({
