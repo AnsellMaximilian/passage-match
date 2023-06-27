@@ -22,6 +22,8 @@ export default function Home() {
   const [choiceTwo, setChoiceTwo] = useState<null | string>(null);
   const [disabled, setDisabled] = useState(false);
 
+  const [playing, setPlaying] = useState(false);
+
   useEffect(() => {
     setCards(
       doubledImages.map((image) => ({ id: uuidv4(), image, matched: false }))
@@ -62,16 +64,21 @@ export default function Home() {
   };
 
   const startGame = () => {
-    setCards((prev) => {
-      const shuffledImages = shuffleArray(doubledImages);
-      const shuffledCards = shuffledImages.map((image) => ({
-        id: uuidv4(),
-        image: image,
-        matched: false,
-      }));
+    if (!playing) {
+      setPlaying(true);
+      setCards((prev) => {
+        const shuffledImages = shuffleArray(doubledImages);
+        const shuffledCards = shuffledImages.map((image) => ({
+          id: uuidv4(),
+          image: image,
+          matched: false,
+        }));
 
-      return shuffledCards;
-    });
+        return shuffledCards;
+      });
+    } else {
+      setPlaying(false);
+    }
   };
 
   const handleChoice = (card: CardObj) => {
@@ -91,10 +98,14 @@ export default function Home() {
           </div>
           <div className="ml-auto">
             <button
-              className="bg-[#4565B6] text-white px-4 py-2 rounded"
+              className={`${
+                playing
+                  ? "bg-red-600 hover:bg-red-800"
+                  : "bg-[#4565B6] hover:bg-[#3c5696]"
+              } text-white px-4 py-2 rounded`}
               onClick={startGame}
             >
-              Start Game
+              {playing ? "Give Up" : "Start Game"}
             </button>
           </div>
         </div>
@@ -107,7 +118,7 @@ export default function Home() {
                 card.id === choiceOne || card.id === choiceTwo || card.matched
               }
               handleChoice={handleChoice}
-              disabled={disabled}
+              disabled={disabled || !playing}
             />
           ))}
         </div>
