@@ -1,16 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { Menu as HUIMenu, Transition } from "@headlessui/react";
 import { HiMenu as MenuIcon } from "react-icons/hi";
 import { FaTrophy as TrophyIcon } from "react-icons/fa";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import useUser from "@/utils/userUser";
+import useUser, { UserContext } from "@/utils/userUser";
 import Link from "next/link";
 
 export default function Menu() {
-  const { user, logout } = useUser();
+  const { user, logout } = useContext(UserContext);
 
   return (
     <HUIMenu as="div" className="relative inline-block text-left">
@@ -30,15 +30,13 @@ export default function Menu() {
       >
         <HUIMenu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
-            {user && (
-              <HUIMenu.Item>
-                <button
-                  className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
-                >
-                  <TrophyIcon /> <span>Leaderboard</span>
-                </button>
-              </HUIMenu.Item>
-            )}
+            <HUIMenu.Item>
+              <button
+                className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
+              >
+                <TrophyIcon /> <span>Leaderboard</span>
+              </button>
+            </HUIMenu.Item>
           </div>
 
           <div className="px-1 py-1 ">
