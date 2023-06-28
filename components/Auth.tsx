@@ -27,10 +27,12 @@ export default function Auth() {
   });
   return (
     <div>
-      <passage-auth
-        ref={ref}
-        app-id={process.env.NEXT_PUBLIC_PASSAGE_ID as string}
-      ></passage-auth>
+      <div className="shadow-lg bg-red-100 p-4">
+        <passage-auth
+          ref={ref}
+          app-id={process.env.NEXT_PUBLIC_PASSAGE_ID as string}
+        ></passage-auth>
+      </div>
     </div>
   );
 }

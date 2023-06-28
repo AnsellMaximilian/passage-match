@@ -21,8 +21,8 @@ export interface CardImage {
 const images: CardImage[] = [
   { name: "onePassKey", image: onePassKey },
   { name: "onePassSquare", image: onePassSquare },
-  { name: "onePass", image: onePass },
-  { name: "hashSquare", image: hashSquare },
+  // { name: "onePass", image: onePass },
+  // { name: "hashSquare", image: hashSquare },
   // { name: "hash", image: hash },
   // { name: "nextSquare", image: nextSquare },
   // { name: "next", image: next },

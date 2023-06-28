@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { Dispatch, SetStateAction, useContext } from "react";
 import { Menu as HUIMenu, Transition } from "@headlessui/react";
 import { HiMenu as MenuIcon } from "react-icons/hi";
-import { FaTrophy as TrophyIcon } from "react-icons/fa";
+import { FaTrophy as TrophyIcon, FaUserAlt as UserIcon } from "react-icons/fa";
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import useUser, { UserContext } from "@/utils/userUser";
 import Link from "next/link";
 
-export default function Menu() {
+export default function Menu({
+  setIsProfileModalOpen,
+}: {
+  setIsProfileModalOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const { user, logout } = useContext(UserContext);
-
   return (
     <HUIMenu as="div" className="relative inline-block text-left">
       <div>
@@ -30,6 +33,16 @@ export default function Menu() {
       >
         <HUIMenu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
+            {user && (
+              <HUIMenu.Item>
+                <button
+                  onClick={() => setIsProfileModalOpen(true)}
+                  className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
+                >
+                  <UserIcon /> <span>Profile</span>
+                </button>
+              </HUIMenu.Item>
+            )}
             <HUIMenu.Item>
               <button
                 className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
@@ -41,7 +54,11 @@ export default function Menu() {
 
           <div className="px-1 py-1 ">
             {user && (
-              <div className="px-2 text-xs text-gray-600">{user.email}</div>
+              <div className="px-2 text-xs text-gray-600">
+                {user.user_metadata
+                  ? (user.user_metadata.username as string)
+                  : user.email}
+              </div>
             )}
             <HUIMenu.Item>
               {user ? (

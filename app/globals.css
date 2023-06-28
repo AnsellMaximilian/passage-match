@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+passage-auth {
+  /* Color Palette */
+  --passage-onprimary-color: #fff; /* text color on primary control background */
+  --passage-primary-color: #4565b6; /* main color used for controls */
+
+  --passage-onhover-color: #fff;
+  --passage-hover-color: #3c5696;
+
+  --passage-onactive-color: #fff;
+  --passage-active-color: #3c5696;
+}

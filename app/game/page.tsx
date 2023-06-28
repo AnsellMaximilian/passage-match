@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Menu from "@/components/Menu";
 import EndGameModal from "@/components/EndGameModal";
 import useUser, { UserContext } from "@/utils/userUser";
+import ProfileModal from "@/components/ProfileModal";
 
 const doubledImages = [...cardImages, ...cardImages];
 
@@ -32,12 +33,16 @@ export default function Home() {
     useState<NodeJS.Timer | null>(null);
   const [gameTime, setGameTime] = useState(180);
 
+  // Modals
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   const [isMounted, setIsMounted] = useState(false);
 
   const { logout, user } = useUser();
 
   useEffect(() => {
     require("@passageidentity/passage-elements/passage-auth");
+    require("@passageidentity/passage-elements/passage-profile");
     setIsMounted(true);
     setCards(
       doubledImages.map((image) => ({ id: uuidv4(), image, matched: false }))
@@ -70,10 +75,27 @@ export default function Home() {
   // check win
   useEffect(() => {
     const allMatched = cards.every((card) => card.matched);
+    // User has won
     if (allMatched && cards.length > 0) {
       setPlaying(false);
       setHasWon(true);
       if (gameTimeIntervalId) clearInterval(gameTimeIntervalId);
+      if (user) {
+        // Upload Score
+        const newScorePromise = fetch("/api/scores", {
+          method: "POST",
+          body: JSON.stringify({
+            userId: user.id,
+            score: score * gameTime,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        newScorePromise
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
     }
   }, [cards, gameTimeIntervalId]);
 
@@ -127,7 +149,7 @@ export default function Home() {
           <div className="container mx-auto p-4">
             <div className="mb-4 gap-4 grid grid-cols-12 text-center items-center max-w-4xl mx-auto">
               <div className="col-span-4 text-left">
-                <Menu />
+                <Menu setIsProfileModalOpen={setIsProfileModalOpen} />
               </div>
               <div className="col-span-4">
                 <div className="flex flex-col">
@@ -174,6 +196,11 @@ export default function Home() {
           closeModal={() => setHasWon(false)}
           currentScore={score}
           remainingSeconds={gameTime}
+        />
+
+        <ProfileModal
+          isOpen={isProfileModalOpen}
+          closeModal={() => setIsProfileModalOpen(false)}
         />
       </main>
     </UserContext.Provider>
