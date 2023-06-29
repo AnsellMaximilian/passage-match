@@ -9,6 +9,7 @@ import Menu from "@/components/Menu";
 import EndGameModal from "@/components/EndGameModal";
 import useUser, { UserContext } from "@/utils/userUser";
 import ProfileModal from "@/components/ProfileModal";
+import LeaderboardModal from "@/components/LeaderboardModal";
 
 const doubledImages = [...cardImages, ...cardImages];
 
@@ -35,6 +36,7 @@ export default function Home() {
 
   // Modals
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isLeaderboardModalOpen, setIsLeaderboardModalOpen] = useState(false);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -149,7 +151,10 @@ export default function Home() {
           <div className="container mx-auto p-4">
             <div className="mb-4 gap-4 grid grid-cols-12 text-center items-center max-w-4xl mx-auto">
               <div className="col-span-4 text-left">
-                <Menu setIsProfileModalOpen={setIsProfileModalOpen} />
+                <Menu
+                  setIsProfileModalOpen={setIsProfileModalOpen}
+                  setIsLeaderboardModalOpen={setIsLeaderboardModalOpen}
+                />
               </div>
               <div className="col-span-4">
                 <div className="flex flex-col">
@@ -201,6 +206,10 @@ export default function Home() {
         <ProfileModal
           isOpen={isProfileModalOpen}
           closeModal={() => setIsProfileModalOpen(false)}
+        />
+        <LeaderboardModal
+          isOpen={isLeaderboardModalOpen}
+          closeModal={() => setIsLeaderboardModalOpen(false)}
         />
       </main>
     </UserContext.Provider>

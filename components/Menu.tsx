@@ -11,8 +11,10 @@ import Link from "next/link";
 
 export default function Menu({
   setIsProfileModalOpen,
+  setIsLeaderboardModalOpen,
 }: {
   setIsProfileModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsLeaderboardModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { user, logout } = useContext(UserContext);
   return (
@@ -45,6 +47,7 @@ export default function Menu({
             )}
             <HUIMenu.Item>
               <button
+                onClick={() => setIsLeaderboardModalOpen(true)}
                 className={`hover:bg-[#4565B6] hover:text-white group flex w-full items-center rounded-md px-2 py-2 text-sm gap-2`}
               >
                 <TrophyIcon /> <span>Leaderboard</span>
@@ -54,11 +57,7 @@ export default function Menu({
 
           <div className="px-1 py-1 ">
             {user && (
-              <div className="px-2 text-xs text-gray-600">
-                {user.user_metadata
-                  ? (user.user_metadata.username as string)
-                  : user.email}
-              </div>
+              <div className="px-2 text-xs text-gray-600">{user.name}</div>
             )}
             <HUIMenu.Item>
               {user ? (

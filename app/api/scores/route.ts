@@ -57,3 +57,26 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET(request: NextRequest) {
+  try {
+    const scores = await prisma.score.findMany({
+      orderBy: {
+        score: "desc",
+      },
+      take: 20,
+      include: {
+        user: true,
+      },
+    });
+
+    return NextResponse.json(scores);
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json(
+      { message: "Error retrieving scores." },
+      { status: 500 }
+    );
+  }
+}
