@@ -17,7 +17,7 @@ datasource db {
 
 model User {
   id              String   @id @default(uuid())
-  passage_id      String
+  passage_id      String   @unique
   email           String   @unique
   name            String
   createdAt       DateTime @default(now())

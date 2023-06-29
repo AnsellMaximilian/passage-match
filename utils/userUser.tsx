@@ -14,11 +14,13 @@ interface UserWithData extends PassageUserInfo {
 interface UserContext {
   user: UserWithData | null;
   logout: () => void;
+  updateName: (newName: string) => void;
 }
 
 export const UserContext = createContext<UserContext>({
   user: null,
   logout: () => {},
+  updateName: () => {},
 });
 
 const useUser = () => {
@@ -50,7 +52,11 @@ const useUser = () => {
     return res;
   };
 
-  return { user, logout };
+  const updateName = (newName: string) => {
+    setUser((prev) => (prev === null ? null : { ...prev, name: newName }));
+  };
+
+  return { user, logout, updateName };
 };
 
 export default useUser;

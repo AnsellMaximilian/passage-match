@@ -22,7 +22,6 @@ export default function LeaderboardModal({ isOpen, closeModal }: Props) {
           const scoresRes = await fetch("/api/scores");
           const scores = await scoresRes.json();
           setScores(scores);
-          console.log("scoers", scores);
         } catch (error) {
           console.log("error");
         }
@@ -31,7 +30,6 @@ export default function LeaderboardModal({ isOpen, closeModal }: Props) {
     }
   }, [isOpen]);
 
-  console.log(scores);
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>

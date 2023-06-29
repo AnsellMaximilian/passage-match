@@ -1,10 +1,39 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { UserContext } from "@/utils/userUser";
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
 }
 export default function ProfileModal({ isOpen, closeModal }: Props) {
+  const { user, updateName } = useContext(UserContext);
+
+  const [name, setName] = useState("");
+
+  const handleUpdateName: React.FormEventHandler<HTMLFormElement> = async (
+    e
+  ) => {
+    e.preventDefault();
+    if (user && name) {
+      const updatedUserRes = await fetch(`/api/users/${user.passage_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const updatedUser = await updatedUserRes.json();
+      updateName(updatedUser.name);
+    }
+  };
+
+  useEffect(() => {
+    if (user) setName(user.name);
+  }, [user]);
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -39,6 +68,30 @@ export default function ProfileModal({ isOpen, closeModal }: Props) {
                   Profile
                 </Dialog.Title>
                 <div className="mt-2">
+                  <form className="px-[30px]" onSubmit={handleUpdateName}>
+                    <label
+                      className="text-gray-700 text-sm font-bold mb-2 flex flex-col"
+                      htmlFor="name"
+                    >
+                      <span>Name</span>
+                      <span className="text-xs text-gray-400 font-light">
+                        (This will be displayed on the leaderboard)
+                      </span>
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="name"
+                        type="text"
+                        placeholder="Name"
+                      />
+                      <button className="rounded-md bg-[#4565B6] hover:bg-[#3c5696] px-2 py-1 text-sm font-medium text-white">
+                        Update
+                      </button>
+                    </div>
+                  </form>
                   <passage-profile
                     app-id={process.env.NEXT_PUBLIC_PASSAGE_ID as string}
                   ></passage-profile>

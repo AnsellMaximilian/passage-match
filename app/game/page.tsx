@@ -40,7 +40,7 @@ export default function Home() {
 
   const [isMounted, setIsMounted] = useState(false);
 
-  const { logout, user } = useUser();
+  const { logout, user, updateName } = useUser();
 
   useEffect(() => {
     require("@passageidentity/passage-elements/passage-auth");
@@ -145,7 +145,7 @@ export default function Home() {
   };
 
   return (
-    <UserContext.Provider value={{ user, logout }}>
+    <UserContext.Provider value={{ user, logout, updateName }}>
       <main className="bg-[#F0F3F9] min-h-screen">
         {isMounted && (
           <div className="container mx-auto p-4">
