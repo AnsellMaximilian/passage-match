@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Score, User } from "@prisma/client";
 import { AiOutlineLoading3Quarters as LoadIcon } from "react-icons/ai";
+import { FaTrophy as TrophyIcon, FaUserAlt as UserIcon } from "react-icons/fa";
+
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
@@ -65,13 +67,33 @@ export default function LeaderboardModal({ isOpen, closeModal }: Props) {
                 </Dialog.Title>
                 <div className="mt-2">
                   {isLoading ? (
-                    <LoadIcon className="animate-spin" />
+                    <div className="flex justify-center my-8">
+                      <LoadIcon className="animate-spin" />
+                    </div>
                   ) : (
-                    <div>
+                    <div className="flex flex-col gap-2 pt-2">
                       {scores.map((score, index) => {
+                        let trophyClass: string = "";
+                        if (index === 0) trophyClass = "text-yellow-500";
+                        else if (index === 1) trophyClass = "text-slate-400";
+                        else if (index === 2) trophyClass = "text-[#d9ae64]";
                         return (
-                          <div key={score.id}>
-                            <div>{score.user.name}</div>
+                          <div
+                            key={score.id}
+                            className="flex justify-between font-semibold bg-[#C9D8FF] p-2 rounded items-center"
+                          >
+                            <div className="gap-2 flex items-center">
+                              <div className="w-8 flex justify-center">
+                                {index < 3 ? (
+                                  <TrophyIcon className={trophyClass} />
+                                ) : (
+                                  <span className="text-sm">
+                                    {("0" + (index + 1)).slice(-2)}
+                                  </span>
+                                )}
+                              </div>
+                              <div>{score.user.name}</div>
+                            </div>
                             <div>{score.score}</div>
                           </div>
                         );
