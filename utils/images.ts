@@ -21,16 +21,16 @@ export interface CardImage {
 const images: CardImage[] = [
   { name: "onePassKey", image: onePassKey },
   { name: "onePassSquare", image: onePassSquare },
-  // { name: "onePass", image: onePass },
-  // { name: "hashSquare", image: hashSquare },
-  // { name: "hash", image: hash },
-  // { name: "nextSquare", image: nextSquare },
-  // { name: "next", image: next },
-  // { name: "passage", image: passage },
-  // { name: "planetScale", image: planetScale },
-  // { name: "react", image: react },
-  // { name: "vercelSquare", image: vercelSquare },
-  // { name: "vercel", image: vercel },
+  { name: "onePass", image: onePass },
+  { name: "hashSquare", image: hashSquare },
+  { name: "hash", image: hash },
+  { name: "nextSquare", image: nextSquare },
+  { name: "next", image: next },
+  { name: "passage", image: passage },
+  { name: "planetScale", image: planetScale },
+  { name: "react", image: react },
+  { name: "vercelSquare", image: vercelSquare },
+  { name: "vercel", image: vercel },
 ];
 
 export default images;
