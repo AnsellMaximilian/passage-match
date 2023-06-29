@@ -56,7 +56,7 @@ export default function AuthPage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-[#F0F3F9] min-h-screen">
       {isMounted && (
         <passage-auth
           ref={ref}
