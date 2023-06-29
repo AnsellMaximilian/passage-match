@@ -6,6 +6,7 @@ import {
   PassageUserInfo,
 } from "@passageidentity/passage-elements/passage-user";
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 interface authResult {
   redirect_url: string;
   auth_token: string;
@@ -57,6 +58,18 @@ export default function AuthPage() {
 
   return (
     <div className="bg-[#F0F3F9] min-h-screen">
+      <div className="flex gap-2 items-center py-8 justify-center">
+        <Image
+          src="/logo.svg"
+          alt="app logo"
+          width={75}
+          height={75}
+          className="w-20"
+        />
+        <div className="w-min text-center font-bold text-4xl bg-gradient-to-r to-[#4565B6] from-[#1A285F] bg-clip-text text-transparent">
+          Passage Match
+        </div>
+      </div>
       {isMounted && (
         <passage-auth
           ref={ref}
